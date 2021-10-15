@@ -2,14 +2,14 @@
 import { Box } from "@material-ui/core"
 import Sidebar from "../../../components/layout/Sidebar"
 
-const MovieList = () => {
+const MovieDetail = () => {
 
     return (
         <Box>
             <Sidebar />
-            MovieList         
+            MovieDetail         
         </Box>
     )
 }
 
-export default MovieList
+export default MovieDetail

@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Redirect, useHistory, useLocation } from "react-router-dom";
+import { makeStyles } from '@material-ui/styles';
+import { Redirect, useLocation } from "react-router-dom";
 import Auth from "../auth/Auth";
 import Path from "../util/path";
-import { makeStyles } from '@material-ui/styles';
-import { Box } from '@material-ui/core';
+import { Box, TextField, Button, Typography } from '@material-ui/core';
+import SendIcon from '@mui/icons-material/Send';
 
 type Props = {
     
@@ -16,7 +17,7 @@ type locationPath = {
 const LoginForm: React.FC<Props> = () => {
     const location = useLocation<locationPath>()
 
-    const classes = useStyles();
+    const classes = useStyles()
 
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
@@ -31,45 +32,58 @@ const LoginForm: React.FC<Props> = () => {
         setEmail('')
       }
     }
-
-    const handleLogout = () => {
-      try {
-        Auth.logout()
-      } catch (e) {
-        alert("Failed to logout")
-        setEmail('')
-      }
-    }
-    
     
     return (
       Auth.authenticated ? <Redirect to={from} />
     :
-      <Box className={classes.Box}>
-        <h1>Login</h1>
-        <input
+      <Box className={classes.box}>
+        <Typography variant="h4" color="initial" className={classes.title}>Login</Typography>
+        <TextField
           value={email}
+          variant='outlined'
+          className={classes.textField}
           onChange={({ target: { value } }) => setEmail(value)}
-          type="text"
-          placeholder="email"
+          type='text'
+          label='email'
+          size='small'
         />
-        {/* <input
+        <TextField
           value={password}
+          variant='outlined'
+          className={classes.textField}
           onChange={({ target: { value } }) => setPassword(value)}
-          type="password"
-          placeholder="password"
-        /> */}
-        <button onClick={handleClick}>Login</button>
-        <button onClick={handleLogout}>Logout</button>
+          type='password'
+          label='password'
+          size='small'
+        />
+        <Button variant="contained" endIcon={<SendIcon />} onClick={handleClick} className={classes.button}>
+          Login
+        </Button>
       </Box>
     );
   }
   
-  export default LoginForm;
-  
-  const useStyles = makeStyles({
-    Box: {
-      backgroundColor: 'red'
-    }
-  });
+export default LoginForm;
+
+const useStyles = makeStyles({
+  title: { 
+    fontFamily: 'Roboto Mono, monospace',
+    marginTop: 10
+  },
+  box: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    marginTop: 50
+  },
+  textField: {
+    width: 320,
+    margin: 20,
+    marginBottom: 0
+  },
+  button: {
+    backgroundColor: '#feffff',
+    margin: 20
+  }
+})
 
