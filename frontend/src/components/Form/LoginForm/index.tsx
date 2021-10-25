@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { makeStyles } from '@material-ui/styles';
 import { Redirect, useLocation } from "react-router-dom";
-import Auth from "../auth/Auth";
-import Path from "../util/path";
+import Auth from "../../../auth/Auth";
+import Path from "../../../util/path";
 import { Box, TextField, Button, Typography } from '@material-ui/core';
 import SendIcon from '@mui/icons-material/Send';
 

@@ -1,3 +1,5 @@
-export { default as MemberList } from './Movie/List'
+export { default as MovieList } from './Movie/List'
+export { default as MovieDetail } from './Movie/Detail'
+export { default as MovieAdd } from './Movie/Add'
 export { default as Login } from './Login'
 export { default as Home } from './Home'

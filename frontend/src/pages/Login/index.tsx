@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import { Box } from "@mui/material"
 import Sidebar from "../../components/layout/Sidebar"
-import LoginForm from "../../components/LoginForm"
+import LoginForm from "../../components/Form/LoginForm"
 
 const Login = () => {
     const classes = useStyles()
