@@ -3,7 +3,7 @@ import Path from '../util/path'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ProtectedRoute from '../auth/ProtectedRoute';
 import MovieDetail from './Movie/Detail';
-import { Home, MovieAdd, MovieUpdate, MovieList, Login } from '.';
+import { Home, MovieAdd, MovieUpdate, MovieList, Login, TicketingList, TicketingDetail } from '.';
 
 const Router: React.FC = () => (
     <BrowserRouter>
@@ -29,6 +29,18 @@ const Router: React.FC = () => (
             <Route exact path={Path.Movie + Path.Update} render={props => 
                 <ProtectedRoute
                     Component={MovieUpdate}
+                    {...props}
+                />
+            } />
+            <Route exact path={Path.Ticketing + Path.List} render={props => 
+                <ProtectedRoute
+                    Component={TicketingList}
+                    {...props}
+                />
+            } />
+            <Route exact path={Path.Ticketing + Path.Detail} render={props => 
+                <ProtectedRoute
+                    Component={TicketingDetail}
                     {...props}
                 />
             } />

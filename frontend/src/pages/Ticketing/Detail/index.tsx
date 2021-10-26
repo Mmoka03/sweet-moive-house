@@ -2,20 +2,18 @@ import { useState, useEffect } from "react"
 import { Box } from "@material-ui/core"
 import Sidebar from "../../../components/layout/Sidebar"
 import {Table, TablePagination, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton} from '@mui/material';
-import RemoveIcon from '@mui/icons-material/Delete';
-import UpdateIcon from '@mui/icons-material/Create';
-import { movieScheduleTestDataList } from "../../../api/test/movieScheduleTestDataList";
-import { categoryFilter } from "../../../util/filter/categoryFilter";
+import CancelIcon from '@mui/icons-material/Cancel';
 import MovieRemoveDialog from "../../../components/modal/MovieRemoveDialog"
-import { movieSchedule } from "../../../util/api/movieSchedule";
+import { ticketingState } from "../../../util/api/ticketingState";
+import { ticketingStateTestDataList } from "../../../api/test/ticketingStateTestDataList";
 
-const MovieList = () => {
-
-    const [movieScheduleDataList, setMovieScheduleDataList] = useState<movieSchedule[]>(movieScheduleTestDataList)
+const TicketingDetail = () => {
+    
+    const [ticketingStateDataList, setTicketingStateDataList] = useState<ticketingState[]>(ticketingStateTestDataList)
     const [DialogOpened, setDialogOpened] = useState<boolean>(false)
-    const [scheduleNo, setScheduleNo] = useState<number>(-1)
+    const [ticketNo, setTicketNo] = useState<number>(-1)
     const [selectIndex, setSelectIndex] = useState<number>(-1)
-    const [page, setPage] = useState(2);
+    const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
   
     const handleChangePage = (
@@ -34,8 +32,8 @@ const MovieList = () => {
 
     // const { from } = location.state || { from: { pathname: Path.Movie+Path.List } }
 
-    const handleRemove = (scheduleNo: number, index: number): void => {
-      setMovieScheduleDataList(movieScheduleDataList.slice(0, index).concat(movieScheduleDataList.slice(index+1)))
+    const handleRemove = (ticketNo: number, index: number): void => {
+        setTicketingStateDataList(ticketingStateDataList.slice(0, index).concat(ticketingStateDataList.slice(index+1)))
     }
     
     const handleDialog = (): void => {
@@ -45,7 +43,7 @@ const MovieList = () => {
     
     useEffect(() => {
 
-    }, [movieScheduleDataList])    
+    }, [ticketingStateDataList])    
 
     return (
         <Box>
@@ -54,41 +52,38 @@ const MovieList = () => {
                 <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                     <TableHead>
                     <TableRow>
-                        <TableCell>영화 제목</TableCell>
-                        <TableCell align="right">스케줄번호</TableCell>
-                        <TableCell align="right">장르</TableCell>
-                        <TableCell align="right">상영시간</TableCell>
+                        <TableCell>순서</TableCell>
+                        <TableCell align="right">영화 제목</TableCell>
                         <TableCell align="right">상영일시</TableCell>
                         <TableCell align="right">상영관</TableCell>
-                        <TableCell align="right" sx={{ paddingRight: 2 }}>수정 및 삭제</TableCell>
+                        <TableCell align="right">예매자</TableCell>
+                        <TableCell align="right">좌석번호</TableCell>
+                        <TableCell align="right" sx={{ paddingRight: 2 }}>예매취소</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {movieScheduleDataList.map((data, index) => (
+                    {ticketingStateDataList.map((data, index) => (
                         <TableRow
-                        key={data.schedule_no}
+                        key={data.ticket_no}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                         <TableCell component="th" scope="row">
-                            {data.movie_name}
+                            {index+1}
                         </TableCell>
-                        <TableCell align="right">{data.schedule_no}</TableCell>
-                        <TableCell align="right">{categoryFilter(data.category)}</TableCell>
-                        <TableCell align="right">{data.runtime_minute}</TableCell>
+                        <TableCell align="right">{data.movie_name}</TableCell>
                         <TableCell align="right">{`
                             ${data.run_day?.toISOString().replace('T', ' ').replace(':00.000Z', '')}
                         `}</TableCell>
                         <TableCell align="right">{data.room_no}</TableCell>
+                        <TableCell align="right">{data.member_id}</TableCell>
+                        <TableCell align="right">{data.seat_no}</TableCell>
                         <TableCell align="right">
-                            <IconButton aria-label="Update">
-                                <UpdateIcon />
-                            </IconButton>
-                            <IconButton aria-label="Remove" onClick={() => {
-                                handleDialog()
-                                setScheduleNo(data.schedule_no)
+                            <IconButton aria-label="Cancel" sx={{ marginRight: 1 }} onClick={() => {
+                                setTicketNo(data.ticket_no)
                                 setSelectIndex(index)
+                                handleDialog()
                             }}>
-                                <RemoveIcon />
+                                <CancelIcon />
                             </IconButton>
                         </TableCell>
                         </TableRow>
@@ -96,7 +91,7 @@ const MovieList = () => {
                     </TableBody>
                 </Table>
                 </TableContainer>
-                <MovieRemoveDialog open={DialogOpened} onClose={handleDialog} onRemove={() => handleRemove(scheduleNo, selectIndex)} />
+                <MovieRemoveDialog open={DialogOpened} onClose={handleDialog} onRemove={() => handleRemove(ticketNo, selectIndex)} />
                 <TablePagination
                     component="div"
                     count={100}
@@ -109,4 +104,4 @@ const MovieList = () => {
     )
 }
 
-export default MovieList
+export default TicketingDetail

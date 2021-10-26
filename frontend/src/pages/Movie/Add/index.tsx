@@ -2,7 +2,6 @@
 import Sidebar from "../../../components/layout/Sidebar"
 import { Box, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import RemoveIcon from '@mui/icons-material/Remove';
 import MovieAddForm from "../../../components/Form/MovieAddForm";
 import { useState } from "react";
 

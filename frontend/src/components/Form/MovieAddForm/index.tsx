@@ -1,14 +1,9 @@
 import { useState, useEffect, ReactElement } from "react";
 import { createTheme } from '@mui/material/styles';
 import { makeStyles } from '@material-ui/styles';
-import { Redirect, useLocation } from "react-router-dom";
-import Auth from "../../../auth/Auth";
-import Path from "../../../util/path";
 import { movie } from "../../../util/api/movie";
 import { Box, TextField, Button, Rating, Input, Radio, FormControl, FormLabel, InputLabel, RadioGroup, FormControlLabel, ThemeProvider, Typography, Paper, TableContainer, Table, TableBody, TableCell, TableRow } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
 import './../../../assets/css/font.css'
-import { Type } from "typescript";
 
 type Props = {
   roomNumber: number
