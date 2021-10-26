@@ -4,14 +4,14 @@ import { makeStyles } from '@material-ui/styles';
 import { Redirect, useLocation } from "react-router-dom";
 import Auth from "../../../auth/Auth";
 import Path from "../../../util/path";
-import { movie } from "../../../util/api/movie";
 import { Box, TextField, Button, Rating, Input, Radio, FormControl, FormLabel, InputLabel, RadioGroup, FormControlLabel, ThemeProvider, Typography, Paper, TableContainer, Table, TableBody, TableCell, TableRow } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import './../../../assets/css/font.css'
 import { Type } from "typescript";
+import { movie } from "../../../util/api/movie";
 
 type Props = {
-  roomNumber: number
+    scheduleNo: number
 }
 
 type FormError = {
@@ -38,8 +38,19 @@ const FormErrorDefaultValue = {
   runDayTypeNotMacth: false,
 }
 
+const testData = {
+    roomNumber: 3,
+    movieName: '언더테일★',
+    category: 4,
+    runTime: 120,
+    runDay: '',
+    runStartTime: 'T08:50:00',
+    rating: 2,
+    moviePoster: 'C:\\Users\\tae gyu\\Pictures\\main.png'
+}
+
 const MovieAddForm: React.FC<Props> = ({
-  roomNumber
+    scheduleNo
 }) => {
     const classes = useStyles()
     
@@ -60,90 +71,86 @@ const MovieAddForm: React.FC<Props> = ({
         ].join(','),
       },
     });
+    
+    const defaultData = testData
 
-    const [movieName, setMovieName] = useState<string>('')
-    const [category, setCategory] = useState<number>(0)
-    const [runTime, setRunTime] = useState<number>(0)
-    const [runDay, setRunDay] = useState<string>('')
-    const [runStartTimeAM, setRunStartTimeAM] = useState<string>('')
-    const [runStartTimePM, setRunStartTimePM] = useState<string>('')
-    const [rating, setRating] = useState<number | null>()
-    const [moviePoster, setMoviePoster] = useState<string>()
+    const [roomNumber, setRoomNumber] = useState<number>(defaultData.roomNumber)
+    const [movieName, setMovieName] = useState<string>(defaultData.movieName)
+    const [category, setCategory] = useState<number>(defaultData.category)
+    const [runTime, setRunTime] = useState<number>(defaultData.runTime)
+    const [runDay, setRunDay] = useState<string>(defaultData.runDay)
+    const [runStartTime, setRunStartTime] = useState<string>(defaultData.runStartTime)
+    const [rating, setRating] = useState<number | null>(defaultData.rating)
+    const [moviePoster, setMoviePoster] = useState<string>(defaultData.moviePoster)
     
     const [isError, setIsError] = useState<boolean>()
     const [error, setError] = useState<FormError>(FormErrorDefaultValue)
-  
-    // const { from } = location.state || { from: { pathname: Path.Movie+Path.List } }
 
+    const [isRedirect, setIsRedirect] = useState<boolean>(false)
+    
+    // const { from } = location.state || { from: { pathname: Path.Movie+Path.List } }
+    const handleUpdate = (): void => {
+        if(!isErrorCheck()) {
+            let movieData: movie
+            if(overlapCheck(movieName, category, runTime)) {
+            movieData = {
+                movie_no: maxMovieNo(),
+                movie_name: movieName,
+                category: category,
+                runtime_minute: runTime,
+                movie_img: moviePoster!,
+                movie_info: rating!
+            }
+            } else {
+            movieData = getMovieData(movieName)
+            }
+            const schedule = {
+            schedule_no: scheduleNo,
+            movie_no: movieData.movie_no,
+            run_day: new Date(runDay+runStartTime),
+            room_no: roomNumber
+            }
+            
+            // use api
+
+            setIsRedirect(true)
+        } else {
+            setIsRedirect(false)
+        }
+      }
+  
+      const overlapCheck = (movieName: string, category: number, runTime: number): boolean => {
+        // api use
+        return true
+      }
+  
+      const getMovieData = (movieName: string): movie => {
+        //api use
+        return {
+          movie_no: 2,
+          movie_name: '언더테일★',
+          category: 4,
+          runtime_minute: 120,
+          movie_img: 'C:\\Users\\tae gyu\\Pictures\\main.png',
+          movie_info: 2
+        }
+      }
+  
+      const maxMovieNo = (): number => {
+        // api use
+        return 3
+      }
+  
     const handleValidation = () => {
       setError({ ...error,
         movieNameEmpty: !movieName ? true : false,  
         categoryEmpty: !category ? true : false,
         runTimeEmpty: !runTime ? true : false,
         runDayEmpty: !runDay ? true : false,
-        runStartTimeEmpty: !runStartTimeAM && !runStartTimePM ? true : false,
+        runStartTimeEmpty: !runStartTime ? true : false,
         movieInfoEmpty: !rating ? true : false,
         moviePosterEmpty: !moviePoster ? true : false,
       })
-    }
-
-    const handleAdd = (): void => {
-      if(!isErrorCheck()) {
-        let movieData: movie
-        if(overlapCheck(movieName, category, runTime)) {
-          movieData = {
-            movie_no: maxMovieNo(),
-            movie_name: movieName,
-            category: category,
-            runtime_minute: runTime,
-            movie_img: moviePoster!,
-            movie_info: rating!
-          }
-        } else {
-          movieData = getMovieData(movieName)
-        }
-        
-        const schedule = [{
-          schedule_no: maxScheduleNo(),
-          movie_no: movieData.movie_no,
-          run_day: new Date(runDay+runStartTimeAM),
-          room_no: roomNumber
-        }, {
-          schedule_no: maxScheduleNo(),
-          movie_no: movieData.movie_no,
-          run_day: new Date(runDay+runStartTimePM),
-          room_no: roomNumber
-        }]
-
-        // use api
-      }
-    }
-
-    const overlapCheck = (movieName: string, category: number, runTime: number): boolean => {
-      // api use
-      return true
-    }
-
-    const getMovieData = (movieName: string): movie => {
-      //api use
-      return {
-        movie_no: 2,
-        movie_name: '언더테일★',
-        category: 4,
-        runtime_minute: 120,
-        movie_img: 'C:\\Users\\tae gyu\\Pictures\\main.png',
-        movie_info: 2
-      }
-    }
-
-    const maxMovieNo = (): number => {
-      // api use
-      return 3
-    }
-
-    const maxScheduleNo = (): number => {
-      // api use
-      return 3
     }
 
     const isErrorCheck = (): boolean => {
@@ -169,6 +176,7 @@ const MovieAddForm: React.FC<Props> = ({
     }, [error])
     
     return (
+    isRedirect ? <Redirect to='' /> :
       <ThemeProvider theme={theme}>
         {isError ? 
           <Box className={classes.errorBox}>
@@ -194,7 +202,17 @@ const MovieAddForm: React.FC<Props> = ({
               <TableBody> 
                 <TableRow>
                   <TableCell align="center"><Typography variant="h6" fontSize={20}>영화관</Typography></TableCell>
-                  <TableCell align="center"><Typography variant="h6" fontSize={18}>{roomNumber}&nbsp;관</Typography></TableCell>
+                  <TableCell align="center">
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">room number</FormLabel>
+                    <RadioGroup value={roomNumber} row aria-label="room number" name="room number" onChange={({ target: { value } }) => setRoomNumber(Number.parseInt(value))}>
+                      <FormControlLabel value={1} control={<Radio />} label="1&nbsp;관" />
+                      <FormControlLabel value={2} control={<Radio />} label="2&nbsp;관" />
+                      <FormControlLabel value={3} control={<Radio />} label="3&nbsp;관" />
+                      <FormControlLabel value={4} control={<Radio />} label="4&nbsp;관" />
+                    </RadioGroup>
+                  </FormControl>
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell align="center"><Typography variant="h6" fontSize={20}>영화제목</Typography></TableCell>
@@ -216,7 +234,7 @@ const MovieAddForm: React.FC<Props> = ({
                   <TableCell align="center">
                   <FormControl component="fieldset">
                     <FormLabel component="legend">category</FormLabel>
-                    <RadioGroup row aria-label="category" name="categoty" onChange={({ target: { value } }) => setCategory(Number.parseInt(value))}>
+                    <RadioGroup value={category} row aria-label="category" name="categoty" onChange={({ target: { value } }) => setCategory(Number.parseInt(value))}>
                       <FormControlLabel value={1} control={<Radio />} label="액션" />
                       <FormControlLabel value={2} control={<Radio />} label="로맨스" />
                       <FormControlLabel value={3} control={<Radio />} label="코미디" />
@@ -262,15 +280,10 @@ const MovieAddForm: React.FC<Props> = ({
                   <TableCell align="center"><Typography variant="h6" fontSize={20}>상영시작시간</Typography></TableCell>
                   <TableCell align="center">
                   <FormControl component="fieldset">
-                    <FormLabel component="legend">am</FormLabel>
-                    <RadioGroup row aria-label="category" name="am" onChange={({ target: { value } }) => setRunStartTimeAM(value)}>
+                    <FormLabel component="legend">time</FormLabel>
+                    <RadioGroup row aria-label="category" name="time" onChange={({ target: { value } }) => setRunStartTime(value)}>
                       <FormControlLabel value='T08:50:00' control={<Radio />} label="08:50" />
                       <FormControlLabel value='T11:10:00' control={<Radio />} label="11:10" />
-                    </RadioGroup>
-                  </FormControl>
-                  <FormControl component="fieldset">
-                    <FormLabel component="legend">pm</FormLabel>
-                    <RadioGroup row aria-label="category" name="pm"  onChange={({ target: { value } }) => setRunStartTimePM(value)}>
                       <FormControlLabel value='T15:50:00' control={<Radio />} label="15:50" />
                       <FormControlLabel value='T18:00:00' control={<Radio />} label="18:00" />
                     </RadioGroup>
@@ -280,7 +293,7 @@ const MovieAddForm: React.FC<Props> = ({
                 <TableRow>
                   <TableCell align="center"><Typography variant="h6" fontSize={20}>영화평점</Typography></TableCell>
                   <TableCell align="center">
-                    <Rating defaultValue={0} size="large" onChange={(event, value) => setRating(value)} />
+                    <Rating defaultValue={0} value={rating} size="large" onChange={(event, value) => setRating(value)} />
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -296,7 +309,9 @@ const MovieAddForm: React.FC<Props> = ({
                 <TableRow>
                   <TableCell align="center" colSpan={2}>
                     <Typography></Typography>
-                    <Button variant="contained" className={classes.button} onClick={handleValidation}>
+                    <Button variant="contained" className={classes.button} onClick={() => {
+                        handleValidation()
+                        handleUpdate()}}>
                       영화 등록  
                     </Button> 
                   </TableCell>

@@ -4,5 +4,5 @@ export interface movie {
     category: number,
     runtime_minute: number,
     movie_img: string,
-    movie_info: string
+    movie_info: number
 }

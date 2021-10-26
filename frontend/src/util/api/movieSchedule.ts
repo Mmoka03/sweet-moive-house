@@ -3,6 +3,6 @@ export interface movieSchedule {
     movie_name: string,
     category: number,
     runtime_minute: number,
-    run_day?: Date,
+    run_day: Date,
     room_no: number
 }

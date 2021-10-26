@@ -3,6 +3,7 @@ const Path = {
     Login: '/login',
     Movie: '/movie',
     Add: '/add',
+    Update: '/update',
     Detail: '/detail',
     List: '/list',
     Ticketing: '/ticketing',

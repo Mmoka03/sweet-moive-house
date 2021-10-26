@@ -22,7 +22,7 @@ const Sidebar: React.FC<Props> = () => {
     const menus = [
         { name: localStorage.getItem('isAuth') ? "로그아웃" : "로그인", path: Path.Login },
         { name: "영화 리스트", path: Path.Movie + Path.List },
-        { name: "신규 영화 등록", path: Path.Movie + Path.Detail },
+        { name: "신규 영화 등록", path: Path.Movie + Path.Add },
         { name: "예매 현황 보기", path: Path.Movie + Path.Detail }
     ];
       

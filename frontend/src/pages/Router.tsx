@@ -1,11 +1,9 @@
 import React from 'react';
 import Path from '../util/path'
-import Login from './Login';
-import MovieList from './Movie/List';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ProtectedRoute from '../auth/ProtectedRoute';
 import MovieDetail from './Movie/Detail';
-import { Home, MovieAdd } from '.';
+import { Home, MovieAdd, MovieUpdate, MovieList, Login } from '.';
 
 const Router: React.FC = () => (
     <BrowserRouter>
@@ -25,6 +23,12 @@ const Router: React.FC = () => (
             <Route exact path={Path.Movie + Path.Add} render={props => 
                 <ProtectedRoute
                     Component={MovieAdd}
+                    {...props}
+                />
+            } />
+            <Route exact path={Path.Movie + Path.Update} render={props => 
+                <ProtectedRoute
+                    Component={MovieUpdate}
                     {...props}
                 />
             } />
