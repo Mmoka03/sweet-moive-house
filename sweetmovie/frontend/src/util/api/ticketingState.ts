@@ -1,9 +1,9 @@
 export interface ticketingState {
-    ticket_no: number,
+    ticket_no: string,
     movie_name: string,
     run_day: Date,
     room_no: number,
     member_id: string,
-    bool_date?: Date,
+    book_date: Date,
     seat_no: number,
 }

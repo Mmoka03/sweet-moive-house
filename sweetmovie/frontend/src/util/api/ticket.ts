@@ -1,6 +1,6 @@
 export interface ticket {
-    ticket_no: number,
-    bool_date?: Date,
+    ticket_no: string,
+    book_date: Date,
     schedule_no: number,
     seat_no: number,
     member_id: string
